@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <stack>
-#include <cctype>
+// #include <cctype>
 
 namespace rl
 {
@@ -24,6 +24,10 @@ void DataParser::load(const std::string& filename)
 
 	for (std::string line; std::getline(ifs, line); )
 	{
+		// remove comment
+		if (const auto found = line.find("//"); found != std::string::npos)
+			line = line.substr(0, found);
+
 		const auto [key, value] = parseLine(line);
 
 		if (key.empty())
@@ -120,7 +124,7 @@ std::pair<std::string, std::string> DataParser::parseLine(const std::string& lin
 	std::string key, value;
 	std::string str = trim(line);
 
-	if (!str.empty() && !std::ispunct(str[0]))
+	if (!str.empty()) // && !std::ispunct(str[0]))
 	{
 		const std::size_t equal = str.find('=');
 
